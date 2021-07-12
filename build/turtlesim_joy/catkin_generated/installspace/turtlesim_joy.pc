@@ -1,0 +1,8 @@
+prefix=/home/leesc427/Graduate_project/install
+
+Name: turtlesim_joy
+Description: Description of turtlesim_joy
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: geometry_msgs roscpp rospy sensor_msgs std_msgs

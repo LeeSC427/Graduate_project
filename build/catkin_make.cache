@@ -1,0 +1,2 @@
+listener:people_listener:people_talker:pioneer:rosaria:talker:turtlesim_joy:turtlesim_pub
+-DCATKIN_DEVEL_PREFIX=/home/leesc427/Graduate_project/devel -DCMAKE_INSTALL_PREFIX=/home/leesc427/Graduate_project/install -G Unix Makefiles
