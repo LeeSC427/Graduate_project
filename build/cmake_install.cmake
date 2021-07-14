@@ -136,9 +136,12 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/leesc427/Graduate_project/build/people_talker/cmake_install.cmake")
   include("/home/leesc427/Graduate_project/build/pioneer/cmake_install.cmake")
   include("/home/leesc427/Graduate_project/build/talker/cmake_install.cmake")
+  include("/home/leesc427/Graduate_project/build/moving_point/cmake_install.cmake")
+  include("/home/leesc427/Graduate_project/build/opencv_camera/cmake_install.cmake")
   include("/home/leesc427/Graduate_project/build/rosaria/cmake_install.cmake")
   include("/home/leesc427/Graduate_project/build/turtlesim_joy/cmake_install.cmake")
   include("/home/leesc427/Graduate_project/build/turtlesim_pub/cmake_install.cmake")
+  include("/home/leesc427/Graduate_project/build/ydlidar_ros/cmake_install.cmake")
 
 endif()
 

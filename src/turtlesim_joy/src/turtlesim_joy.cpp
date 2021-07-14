@@ -13,11 +13,13 @@ class body
         float joy_FB = 0.0f;
         float joy_LR = 0.0f;
         float joy_act = 0.0f;
+        float joy_trigger = 0.0f;
         void joyCallback(const sensor_msgs::Joy::ConstPtr& msg)
         {    
             joy_FB = msg->axes[1];
             joy_LR = msg->axes[0];
-            joy_act = msg->buttons[6];
+            joy_act = msg->buttons[8];
+            joy_trigger = msg->axes[5];
             // for (unsigned i = 0; i < msg->axes.size(); i++)
             //     ROS_INFO("Axis %d is now at position %f",i,msg->axes[i]);
         }
@@ -45,35 +47,12 @@ int main(int argc, char **argv)
 
 	while (ros::ok())
 	{
-        if(test.joy_act == 1.0f)
+        if(test.joy_trigger == -1.0f && test.joy_act == 1.0f)
         {
-            if(test.joy_FB == 1.0f)
-            {
-             test.mov.linear.x = 1.0;
-             test.mov.angular.z = 1.0;
-            }
-            else if(test.joy_LR ==-1.0f)
-            {
-                test.mov.linear.x = 0.0;
-                test.mov.angular.z = -1.0;
-            }
-                else if(test.joy_FB == -1.0f)
-            {
-                test.mov.linear.x = -1.0;
-                test.mov.angular.z = 0.0;
-            }
-            else if(test.joy_LR==1.0f)
-            {
-                test.mov.linear.x = 0.0;
-                test.mov.angular.z = 1.0;
-            }
-            else if(test.joy_FB != 1.0f && test.joy_LR !=1.0f)
-            {
-                test.mov.linear.x = 0.0;
-                test.mov.angular.z = 0.0;
-            }
+            test.mov.linear.x = 5.0*test.joy_FB;
+            test.mov.angular.z = 1.0*test.joy_LR;
         }
-        else if(test.joy_act != 1.0f)
+        else
         {
             test.mov.linear.x = 0.0;
             test.mov.angular.z = 0.0;

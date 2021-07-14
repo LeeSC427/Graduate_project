@@ -1,0 +1,8 @@
+prefix=/home/leesc427/Graduate_project/devel
+
+Name: opencv_camera
+Description: Description of opencv_camera
+Version: 0.0.0
+Cflags: -I/home/leesc427/Graduate_project/src/opencv_camera/include
+Libs: -L${prefix}/lib 
+Requires: cv_bridge roscpp rospy std_msgs
