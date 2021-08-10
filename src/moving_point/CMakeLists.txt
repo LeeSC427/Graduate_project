@@ -18,8 +18,8 @@ catkin_package(
 
 include_directories(
  include
-  ${catkin_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
 )
 
  add_executable(${PROJECT_NAME}_node src/moving_point.cpp)
@@ -28,5 +28,6 @@ include_directories(
 
  target_link_libraries(${PROJECT_NAME}_node
    ${catkin_LIBRARIES}
+   ${OpenCV_LIBRARIES}
  )
 

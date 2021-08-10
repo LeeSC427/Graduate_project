@@ -1,0 +1,8 @@
+prefix=/home/leesc427/Graduate_project/devel
+
+Name: point_track
+Description: Description of point_track
+Version: 0.0.0
+Cflags: -I/home/leesc427/Graduate_project/src/point_track/include
+Libs: -L${prefix}/lib 
+Requires: cv_bridge rosconsole roscpp sensor_msgs

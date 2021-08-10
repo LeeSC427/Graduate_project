@@ -1,0 +1,8 @@
+prefix=/home/leesc427/Graduate_project/devel
+
+Name: scan2grid
+Description: Description of scan2grid
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib -lscan2grid
+Requires: roscpp std_msgs tf sensor_msgs geometry_msgs

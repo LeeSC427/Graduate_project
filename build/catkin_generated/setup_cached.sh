@@ -7,10 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/leesc427/Graduate_project/devel:$CMAKE_PREFIX_PATH"
-export LD_LIBRARY_PATH="/home/leesc427/Graduate_project/devel/lib:$LD_LIBRARY_PATH"
-export PKG_CONFIG_PATH="/home/leesc427/Graduate_project/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD='/home/leesc427/Graduate_project/build'
-export PYTHONPATH="/home/leesc427/Graduate_project/devel/lib/python2.7/dist-packages:$PYTHONPATH"
-export ROSLISP_PACKAGE_DIRECTORIES='/home/leesc427/Graduate_project/devel/share/common-lisp'
-export ROS_PACKAGE_PATH="/home/leesc427/Graduate_project/src:$ROS_PACKAGE_PATH"

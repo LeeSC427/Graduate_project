@@ -1,0 +1,8 @@
+prefix=/home/leesc427/Graduate_project/devel
+
+Name: pointer_game
+Description: Description of pointer_game
+Version: 0.0.0
+Cflags: -I/home/leesc427/Graduate_project/src/pointer_game/include
+Libs: -L${prefix}/lib 
+Requires: cv_bridge roscpp std_msgs

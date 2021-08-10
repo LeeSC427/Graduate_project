@@ -266,6 +266,9 @@ EMPY_EXECUTABLE:FILEPATH=/usr/bin/empy
 //Empy script
 EMPY_SCRIPT:STRING=/usr/bin/empy
 
+//The directory containing a CMake configuration file for Eigen3.
+Eigen3_DIR:PATH=/usr/lib/cmake/eigen3
+
 //The directory containing a CMake configuration file for GMock.
 GMock_DIR:PATH=GMock_DIR-NOTFOUND
 
@@ -343,6 +346,12 @@ actionlib_msgs_DIR:PATH=/opt/ros/melodic/share/actionlib_msgs/cmake
 
 //The directory containing a CMake configuration file for catkin.
 catkin_DIR:PATH=/opt/ros/melodic/share/catkin/cmake
+
+//Value Computed by CMake
+coordinate_BINARY_DIR:STATIC=/home/leesc427/Graduate_project/build/coordinate
+
+//Value Computed by CMake
+coordinate_SOURCE_DIR:STATIC=/home/leesc427/Graduate_project/src/coordinate
 
 //The directory containing a CMake configuration file for cpp_common.
 cpp_common_DIR:PATH=/opt/ros/melodic/share/cpp_common/cmake
@@ -427,6 +436,12 @@ gtest_main_LIB_DEPENDS:STATIC=general;-lpthread;general;gtest;
 lib:FILEPATH=/opt/ros/melodic/lib/libxmlrpcpp.so
 
 //Value Computed by CMake
+lidar_pointcloud_BINARY_DIR:STATIC=/home/leesc427/Graduate_project/build/lidar_pointcloud
+
+//Value Computed by CMake
+lidar_pointcloud_SOURCE_DIR:STATIC=/home/leesc427/Graduate_project/src/lidar_pointcloud
+
+//Value Computed by CMake
 listener_BINARY_DIR:STATIC=/home/leesc427/Graduate_project/build/listener
 
 //Value Computed by CMake
@@ -475,6 +490,18 @@ pioneer_BINARY_DIR:STATIC=/home/leesc427/Graduate_project/build/pioneer
 pioneer_SOURCE_DIR:STATIC=/home/leesc427/Graduate_project/src/pioneer
 
 //Value Computed by CMake
+point_track_BINARY_DIR:STATIC=/home/leesc427/Graduate_project/build/point_track
+
+//Value Computed by CMake
+point_track_SOURCE_DIR:STATIC=/home/leesc427/Graduate_project/src/point_track
+
+//Value Computed by CMake
+pointer_game_BINARY_DIR:STATIC=/home/leesc427/Graduate_project/build/pointer_game
+
+//Value Computed by CMake
+pointer_game_SOURCE_DIR:STATIC=/home/leesc427/Graduate_project/src/pointer_game
+
+//Value Computed by CMake
 rosaria_BINARY_DIR:STATIC=/home/leesc427/Graduate_project/build/rosaria
 
 //Value Computed by CMake
@@ -504,8 +531,17 @@ rospy_DIR:PATH=/opt/ros/melodic/share/rospy/cmake
 //The directory containing a CMake configuration file for rostime.
 rostime_DIR:PATH=/opt/ros/melodic/share/rostime/cmake
 
+//Value Computed by CMake
+scan2grid_BINARY_DIR:STATIC=/home/leesc427/Graduate_project/build/scan2grid
+
+//Value Computed by CMake
+scan2grid_SOURCE_DIR:STATIC=/home/leesc427/Graduate_project/src/scan2grid
+
 //The directory containing a CMake configuration file for sensor_msgs.
 sensor_msgs_DIR:PATH=/opt/ros/melodic/share/sensor_msgs/cmake
+
+//The directory containing a CMake configuration file for std_msg.
+std_msg_DIR:PATH=std_msg_DIR-NOTFOUND
 
 //The directory containing a CMake configuration file for std_msgs.
 std_msgs_DIR:PATH=/opt/ros/melodic/share/std_msgs/cmake
@@ -690,7 +726,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=15
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=20
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

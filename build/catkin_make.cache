@@ -1,2 +1,2 @@
-listener:moving_point:opencv_camera:people_listener:people_talker:pioneer:rosaria:talker:turtlesim_joy:turtlesim_pub:ydlidar_ros
+coordinate:lidar_pointcloud:listener:moving_point:opencv_camera:people_listener:people_talker:pioneer:point_track:pointer_game:rosaria:scan2grid:talker:turtlesim_joy:turtlesim_pub:ydlidar_ros
 -DCATKIN_DEVEL_PREFIX=/home/leesc427/Graduate_project/devel -DCMAKE_INSTALL_PREFIX=/home/leesc427/Graduate_project/install -G Unix Makefiles

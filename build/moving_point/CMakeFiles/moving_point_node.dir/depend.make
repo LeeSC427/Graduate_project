@@ -63,6 +63,7 @@ moving_point/CMakeFiles/moving_point_node.dir/src/moving_point.cpp.o: /opt/ros/m
 moving_point/CMakeFiles/moving_point_node.dir/src/moving_point.cpp.o: /opt/ros/melodic/include/sensor_msgs/Image.h
 moving_point/CMakeFiles/moving_point_node.dir/src/moving_point.cpp.o: /opt/ros/melodic/include/sensor_msgs/image_encodings.h
 moving_point/CMakeFiles/moving_point_node.dir/src/moving_point.cpp.o: /opt/ros/melodic/include/std_msgs/Header.h
+moving_point/CMakeFiles/moving_point_node.dir/src/moving_point.cpp.o: /opt/ros/melodic/include/std_msgs/String.h
 moving_point/CMakeFiles/moving_point_node.dir/src/moving_point.cpp.o: /opt/ros/melodic/include/xmlrpcpp/XmlRpcDecl.h
 moving_point/CMakeFiles/moving_point_node.dir/src/moving_point.cpp.o: /opt/ros/melodic/include/xmlrpcpp/XmlRpcValue.h
 

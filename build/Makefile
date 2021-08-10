@@ -619,8 +619,21 @@ sensor_msgs_generate_messages_eus: cmake_check_build_system
 
 # fast build rule for target.
 sensor_msgs_generate_messages_eus/fast:
-	$(MAKE) -f moving_point/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build.make moving_point/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build
+	$(MAKE) -f coordinate/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build.make coordinate/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build
 .PHONY : sensor_msgs_generate_messages_eus/fast
+
+#=============================================================================
+# Target rules for targets named coordinate_node
+
+# Build rule for target.
+coordinate_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 coordinate_node
+.PHONY : coordinate_node
+
+# fast build rule for target.
+coordinate_node/fast:
+	$(MAKE) -f coordinate/CMakeFiles/coordinate_node.dir/build.make coordinate/CMakeFiles/coordinate_node.dir/build
+.PHONY : coordinate_node/fast
 
 #=============================================================================
 # Target rules for targets named sensor_msgs_generate_messages_lisp
@@ -632,8 +645,60 @@ sensor_msgs_generate_messages_lisp: cmake_check_build_system
 
 # fast build rule for target.
 sensor_msgs_generate_messages_lisp/fast:
-	$(MAKE) -f moving_point/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make moving_point/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
+	$(MAKE) -f coordinate/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make coordinate/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
 .PHONY : sensor_msgs_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named sensor_msgs_generate_messages_nodejs
+
+# Build rule for target.
+sensor_msgs_generate_messages_nodejs: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sensor_msgs_generate_messages_nodejs
+.PHONY : sensor_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+sensor_msgs_generate_messages_nodejs/fast:
+	$(MAKE) -f coordinate/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build.make coordinate/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build
+.PHONY : sensor_msgs_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named sensor_msgs_generate_messages_cpp
+
+# Build rule for target.
+sensor_msgs_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sensor_msgs_generate_messages_cpp
+.PHONY : sensor_msgs_generate_messages_cpp
+
+# fast build rule for target.
+sensor_msgs_generate_messages_cpp/fast:
+	$(MAKE) -f coordinate/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make coordinate/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
+.PHONY : sensor_msgs_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named sensor_msgs_generate_messages_py
+
+# Build rule for target.
+sensor_msgs_generate_messages_py: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sensor_msgs_generate_messages_py
+.PHONY : sensor_msgs_generate_messages_py
+
+# fast build rule for target.
+sensor_msgs_generate_messages_py/fast:
+	$(MAKE) -f coordinate/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make coordinate/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
+.PHONY : sensor_msgs_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named lidar_pointcloud_node
+
+# Build rule for target.
+lidar_pointcloud_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 lidar_pointcloud_node
+.PHONY : lidar_pointcloud_node
+
+# fast build rule for target.
+lidar_pointcloud_node/fast:
+	$(MAKE) -f lidar_pointcloud/CMakeFiles/lidar_pointcloud_node.dir/build.make lidar_pointcloud/CMakeFiles/lidar_pointcloud_node.dir/build
+.PHONY : lidar_pointcloud_node/fast
 
 #=============================================================================
 # Target rules for targets named moving_point_node
@@ -649,45 +714,6 @@ moving_point_node/fast:
 .PHONY : moving_point_node/fast
 
 #=============================================================================
-# Target rules for targets named sensor_msgs_generate_messages_nodejs
-
-# Build rule for target.
-sensor_msgs_generate_messages_nodejs: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 sensor_msgs_generate_messages_nodejs
-.PHONY : sensor_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-sensor_msgs_generate_messages_nodejs/fast:
-	$(MAKE) -f moving_point/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build.make moving_point/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build
-.PHONY : sensor_msgs_generate_messages_nodejs/fast
-
-#=============================================================================
-# Target rules for targets named sensor_msgs_generate_messages_cpp
-
-# Build rule for target.
-sensor_msgs_generate_messages_cpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 sensor_msgs_generate_messages_cpp
-.PHONY : sensor_msgs_generate_messages_cpp
-
-# fast build rule for target.
-sensor_msgs_generate_messages_cpp/fast:
-	$(MAKE) -f moving_point/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make moving_point/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
-.PHONY : sensor_msgs_generate_messages_cpp/fast
-
-#=============================================================================
-# Target rules for targets named sensor_msgs_generate_messages_py
-
-# Build rule for target.
-sensor_msgs_generate_messages_py: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 sensor_msgs_generate_messages_py
-.PHONY : sensor_msgs_generate_messages_py
-
-# fast build rule for target.
-sensor_msgs_generate_messages_py/fast:
-	$(MAKE) -f moving_point/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make moving_point/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
-.PHONY : sensor_msgs_generate_messages_py/fast
-
-#=============================================================================
 # Target rules for targets named opencv_camera_node
 
 # Build rule for target.
@@ -699,6 +725,32 @@ opencv_camera_node: cmake_check_build_system
 opencv_camera_node/fast:
 	$(MAKE) -f opencv_camera/CMakeFiles/opencv_camera_node.dir/build.make opencv_camera/CMakeFiles/opencv_camera_node.dir/build
 .PHONY : opencv_camera_node/fast
+
+#=============================================================================
+# Target rules for targets named point_track_node
+
+# Build rule for target.
+point_track_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 point_track_node
+.PHONY : point_track_node
+
+# fast build rule for target.
+point_track_node/fast:
+	$(MAKE) -f point_track/CMakeFiles/point_track_node.dir/build.make point_track/CMakeFiles/point_track_node.dir/build
+.PHONY : point_track_node/fast
+
+#=============================================================================
+# Target rules for targets named pointer_game_node
+
+# Build rule for target.
+pointer_game_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pointer_game_node
+.PHONY : pointer_game_node
+
+# fast build rule for target.
+pointer_game_node/fast:
+	$(MAKE) -f pointer_game/CMakeFiles/pointer_game_node.dir/build.make pointer_game/CMakeFiles/pointer_game_node.dir/build
+.PHONY : pointer_game_node/fast
 
 #=============================================================================
 # Target rules for targets named rosaria_genpy
@@ -1299,6 +1351,19 @@ _rosaria_generate_messages_check_deps_BumperState/fast:
 .PHONY : _rosaria_generate_messages_check_deps_BumperState/fast
 
 #=============================================================================
+# Target rules for targets named scan2grid
+
+# Build rule for target.
+scan2grid: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 scan2grid
+.PHONY : scan2grid
+
+# fast build rule for target.
+scan2grid/fast:
+	$(MAKE) -f scan2grid/CMakeFiles/scan2grid.dir/build.make scan2grid/CMakeFiles/scan2grid.dir/build
+.PHONY : scan2grid/fast
+
+#=============================================================================
 # Target rules for targets named turtlesim_joy_node
 
 # Build rule for target.
@@ -1398,12 +1463,16 @@ help:
 	@echo "... geometry_msgs_generate_messages_py"
 	@echo "... talker_node"
 	@echo "... sensor_msgs_generate_messages_eus"
+	@echo "... coordinate_node"
 	@echo "... sensor_msgs_generate_messages_lisp"
-	@echo "... moving_point_node"
 	@echo "... sensor_msgs_generate_messages_nodejs"
 	@echo "... sensor_msgs_generate_messages_cpp"
 	@echo "... sensor_msgs_generate_messages_py"
+	@echo "... lidar_pointcloud_node"
+	@echo "... moving_point_node"
 	@echo "... opencv_camera_node"
+	@echo "... point_track_node"
+	@echo "... pointer_game_node"
 	@echo "... rosaria_genpy"
 	@echo "... rosaria_generate_messages_py"
 	@echo "... rosaria_gennodejs"
@@ -1450,6 +1519,7 @@ help:
 	@echo "... RosAria"
 	@echo "... tf_generate_messages_eus"
 	@echo "... _rosaria_generate_messages_check_deps_BumperState"
+	@echo "... scan2grid"
 	@echo "... turtlesim_joy_node"
 	@echo "... turtlesim_pub_node"
 	@echo "... ydlidar_client"

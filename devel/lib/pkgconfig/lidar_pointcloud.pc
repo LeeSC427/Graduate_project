@@ -1,0 +1,8 @@
+prefix=/home/leesc427/Graduate_project/devel
+
+Name: lidar_pointcloud
+Description: Description of lidar_pointcloud
+Version: 0.0.0
+Cflags: -I/home/leesc427/Graduate_project/src/lidar_pointcloud/include
+Libs: -L${prefix}/lib 
+Requires: rosconsole roscpp sensor_msgs cv_bridge

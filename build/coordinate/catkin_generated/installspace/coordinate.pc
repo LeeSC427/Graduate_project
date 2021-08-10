@@ -1,0 +1,8 @@
+prefix=/home/leesc427/Graduate_project/install
+
+Name: coordinate
+Description: Description of coordinate
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: cv_bridge roscpp
