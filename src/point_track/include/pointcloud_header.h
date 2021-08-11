@@ -53,8 +53,6 @@ class Mean
 class Point_cloud
 {
     public:
-            // int point_x = 0;
-            // int point_y = 0;
             int center_x = 240;
             int center_y = 320;
             int box_dist = 20;
@@ -83,12 +81,10 @@ class Point_cloud
             
             POINTS.clear();
             scan_range.clear();
-            // TARGET.clear();
-
+           
             for(int i = 0; i < size; i++)
             {
                 scan_range.push_back(scan_msg->ranges[i]);
-                // scan_range[i] = scan_msg->ranges[i];
             }
             
             POINTS1 = point_cloud(POINTS, center, mat, scan_range, scan_angle,size);
@@ -98,8 +94,6 @@ class Point_cloud
             
             Box(mat);
             std::cout << TARGET1.size() << std::endl;
-            std::cout << runtime << std::endl;
-
 
             if(TARGET1.size() == 0)
                 runtime = 0;
@@ -112,28 +106,15 @@ class Point_cloud
 
             else if(runtime == 1)
             {
-                // for(int i = 0; i < POINTS1.size(); i++)
-                // {
-                //     p2p_dist = Distance(mean, POINTS1[i].point_x, POINTS1[i].point_y);
-                //     if(p2p_dist <= tar_radius)
-                //     {
-                        TARGET1 = New_target(mat, mean, tar, TARGET1, POINTS1, size, mat, ref_run);
-                //     }
-
-                // }
-                
+                TARGET1 = New_target(mat, mean, tar, TARGET1, POINTS1, size, mat, ref_run);
             }
-            // std::cout << POINTS1.size() << std::endl;
-            // std::cout << TARGET1.size() << std::endl;
-            // std::cout << "runtime: " << ref_run << std::endl;
-            // std::cout << TARGET1[1].targ << std::endl;
-                std::cout << mean.MEAN << std::endl;
+            std::cout << mean.MEAN << std::endl;
+           
             int tar_size = TARGET1.size();
             
             if(tar_size > 0)
             {
                 mean = MEAN(mat, TARGET1, mean, tar_size);
-                // std::cout << mean1.MEAN << std::endl;
             }
 
             Show(mat);
@@ -230,7 +211,6 @@ class Point_cloud
             
             cv::circle(mat, mean.MEAN, tar_radius, cv::Scalar(0, 0, 255), 2);
             cv::circle(mat, mean.MEAN, tar_center, cv::Scalar(0, 0, 255),-1);
-            // std::cout << mean.MEAN << std::endl;
             return mean;
         }
 
@@ -265,8 +245,6 @@ class Point_cloud
             }   
 
             int tar_size = TARGETa.size();
-
-            std::cout << TARGETa.size() << std::endl;
 
             ref_run = 1;
 
