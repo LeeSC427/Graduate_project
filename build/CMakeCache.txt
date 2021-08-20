@@ -348,6 +348,18 @@ actionlib_msgs_DIR:PATH=/opt/ros/melodic/share/actionlib_msgs/cmake
 catkin_DIR:PATH=/opt/ros/melodic/share/catkin/cmake
 
 //Value Computed by CMake
+cmd_vel_BINARY_DIR:STATIC=/home/leesc427/Graduate_project/build/cmd_vel
+
+//Value Computed by CMake
+cmd_vel_SOURCE_DIR:STATIC=/home/leesc427/Graduate_project/src/cmd_vel
+
+//Value Computed by CMake
+connection_BINARY_DIR:STATIC=/home/leesc427/Graduate_project/build/connection
+
+//Value Computed by CMake
+connection_SOURCE_DIR:STATIC=/home/leesc427/Graduate_project/src/connection
+
+//Value Computed by CMake
 coordinate_BINARY_DIR:STATIC=/home/leesc427/Graduate_project/build/coordinate
 
 //Value Computed by CMake
@@ -361,6 +373,12 @@ cv_bridge_DIR:PATH=/opt/ros/melodic/share/cv_bridge/cmake
 
 //The directory containing a CMake configuration file for dynamic_reconfigure.
 dynamic_reconfigure_DIR:PATH=/opt/ros/melodic/share/dynamic_reconfigure/cmake
+
+//Value Computed by CMake
+example_BINARY_DIR:STATIC=/home/leesc427/Graduate_project/build/example
+
+//Value Computed by CMake
+example_SOURCE_DIR:STATIC=/home/leesc427/Graduate_project/src/example
 
 //The directory containing a CMake configuration file for gencpp.
 gencpp_DIR:PATH=/opt/ros/melodic/share/gencpp/cmake
@@ -723,7 +741,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=20
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=23
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

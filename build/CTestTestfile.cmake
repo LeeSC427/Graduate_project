@@ -5,11 +5,14 @@
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
+subdirs("connection")
+subdirs("example")
 subdirs("listener")
 subdirs("people_listener")
 subdirs("people_talker")
 subdirs("pioneer")
 subdirs("talker")
+subdirs("cmd_vel")
 subdirs("coordinate")
 subdirs("lidar_pointcloud")
 subdirs("moving_point")

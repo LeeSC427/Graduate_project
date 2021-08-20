@@ -1,0 +1,8 @@
+prefix=/home/leesc427/Graduate_project/devel
+
+Name: cmd_vel
+Description: Description of cmd_vel
+Version: 0.0.0
+Cflags: -I/home/leesc427/Graduate_project/src/cmd_vel/include
+Libs: -L${prefix}/lib 
+Requires: geometry_msgs roscpp sensor_msgs std_msgs

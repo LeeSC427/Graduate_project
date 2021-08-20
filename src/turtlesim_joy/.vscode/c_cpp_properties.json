@@ -1,0 +1,33 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/leesc427/Graduate_project/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/leesc427/Graduate_project/src/connection/include/**",
+        "/home/leesc427/Graduate_project/src/coordinate/include/**",
+        "/home/leesc427/Graduate_project/src/example/include/**",
+        "/home/leesc427/Graduate_project/src/lidar_pointcloud/include/**",
+        "/home/leesc427/Graduate_project/src/listener/include/**",
+        "/home/leesc427/Graduate_project/src/moving_point/include/**",
+        "/home/leesc427/Graduate_project/src/opencv_camera/include/**",
+        "/home/leesc427/Graduate_project/src/people_listener/include/**",
+        "/home/leesc427/Graduate_project/src/people_talker/include/**",
+        "/home/leesc427/Graduate_project/src/pioneer/include/**",
+        "/home/leesc427/Graduate_project/src/point_track/include/**",
+        "/home/leesc427/Graduate_project/src/pointer_game/include/**",
+        "/home/leesc427/Graduate_project/src/scan2grid/include/**",
+        "/home/leesc427/Graduate_project/src/talker/include/**",
+        "/home/leesc427/Graduate_project/src/turtlesim_joy/include/**",
+        "/home/leesc427/Graduate_project/src/turtlesim_pub/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}

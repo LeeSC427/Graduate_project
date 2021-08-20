@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/leesc427/Graduate_project/devel/include/**",
+                "/opt/ros/melodic/include/**",
+                "/usr/include/**",
+                "/opt/ros/melodic/include",
+                "/home/leesc427/Graduate_project/src/cmd_vel/include/**"
+            ],
+            "name": "ROS"
+        }
+    ],
+    "version": 4
+}

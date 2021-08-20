@@ -1,0 +1,8 @@
+prefix=/home/leesc427/Graduate_project/install
+
+Name: example
+Description: Description of example
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
