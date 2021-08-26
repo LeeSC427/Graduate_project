@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(point_track)
+add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge

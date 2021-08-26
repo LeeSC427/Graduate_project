@@ -1,0 +1,2 @@
+ira_laser_tools:ls01b_v2
+-DCATKIN_DEVEL_PREFIX=/home/cona/merged_ls01b/devel -DCMAKE_INSTALL_PREFIX=/home/cona/merged_ls01b/install -G Unix Makefiles

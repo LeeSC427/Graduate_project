@@ -1,0 +1,30 @@
+<!--
+DESCRITPION
+-->
+
+<launch>
+    <node name="front_laser" pkg="ls01b_v2" type="ls01b_v2">
+        <param name="scan_topic" value="scan1"/>         #设置激光数据topic名称
+        <param name="frame_id" value="laser1"/>     #激光坐标
+        <param name="serial_port" value="/dev/front_laser"/>  #雷达连接的串口
+        <param name="baud_rate" value="460800" />        #雷达连接的串口波特率
+        <param name="angle_resolution" value="0.25"/>     #雷达角度分辨率
+        <param name="zero_as_max" value="false"/>        # 设置为true探测不到区域会变成最大值
+        <param name="min_as_zero" value="false"/>        # true：探测不到区域为0，false：探测不到区域为inf
+        <param name="rpm" value="600"/>                 #　雷达转速
+        <param name="angle_compensate" value="true"/>                 #　角度补偿，非同轴
+    </node>
+    <node name="rear_laser" pkg="ls01b_v2" type="ls01b_v2">
+        <param name="scan_topic" value="scan2"/>         #设置激光数据topic名称
+        <param name="frame_id" value="laser2"/>     #激光坐标
+        <param name="serial_port" value="/dev/rear_laser"/>  #雷达连接的串口
+        <param name="baud_rate" value="460800" />        #雷达连接的串口波特率
+        <param name="angle_resolution" value="0.25"/>     #雷达角度分辨率
+        <param name="zero_as_max" value="false"/>        # 设置为true探测不到区域会变成最大值
+        <param name="min_as_zero" value="false"/>        # true：探测不到区域为0，false：探测不到区域为inf
+        <param name="rpm" value="600"/>                 #　雷达转速
+        <param name="angle_compensate" value="true"/>                 #　角度补偿，非同轴
+    </node>
+
+ 
+</launch>

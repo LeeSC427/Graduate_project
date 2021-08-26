@@ -1,0 +1,8 @@
+1. roslaunch ls01b_v2 merger.launch 실행하면 됩니다.
+2. sudo chmod 777 /dev/ttyUSB숫자 실행 시켜주셔야합니다.(라이다)
+3. tf 설정 해주셔야합니다.
+
+1번 라이다 topic: scan_1
+2번 라이다 topic: sacn_2
+merge 된 라이다 topic: scan_multi
+
