@@ -6,11 +6,13 @@
 	<node name="connection" pkg="connection" type="connection_node" output="screen">
 			<param name="speed"		type="double" value="0.1" />
 			<param name="R_SPEED"		type="double" value="0.523" />
+			<param name="wheel_dist"		type="double" value="0.4" />
+
 		</node>
 	
 	<group ns = "lidar1">
    	 <node name="ydlidar_node_1"  pkg="ydlidar_ros"  type="ydlidar_node" output="screen" respawn="false" >
-    		<param name="port"         type="string" value="/dev/ttyUSB0"/>
+    		<param name="port"         type="string" value="/dev/ttyUSB1"/>
     		<param name="baudrate"         type="int" value="512000"/>
     		<param name="frame_id"     type="string" value="laser_frame1"/>
 			<param name="resolution_fixed"    type="bool"   value="true"/>
@@ -27,7 +29,7 @@
     		args="0.2245 0.0 0.2 0.0 0.0  0.0 /base_footprint /laser_frame 40" />
 
 	 <node name="ydlidar_node_2" pkg="ydlidar_ros"  type="ydlidar_node" output="screen" respawn="false" >
-    		<param name="port"         type="string" value="/dev/ttyUSB1"/>
+    		<param name="port"         type="string" value="/dev/ttyUSB2"/>
     		<param name="baudrate"         type="int" value="512000"/>
     		<param name="frame_id"     type="string" value="laser_frame1"/>
 		<param name="resolution_fixed"    type="bool"   value="true"/>

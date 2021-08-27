@@ -32,14 +32,14 @@ class CMD_vel
         }
 
         
-        void MOV(double speed, double R_SPEED)
+        void MOV(double speed, double R_SPEED, double wheel_dist)
         {
             rpm_1 = speed * T_RPM * (T_vel + R_vel*1.72*R_SPEED);
             rpm_2 = speed * T_RPM * (T_vel - R_vel*1.72*R_SPEED);
             // rpm_1 = T_RPM;
             // rpm_2 = T_RPM;
 
-            con.receive_task();
+            con.receive_task(wheel_dist);
             con.send_task(rpm_1, rpm_2, joy_ACT);
             
             if(run_time == 0)

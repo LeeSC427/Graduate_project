@@ -6,12 +6,13 @@
 #include "ros/ros.h"
 #include "geometry_msgs/Twist.h"
 #include <cmath>
+#include "connection/odom.h"
 // #include "connection/joy.h"
 
 class PORT
 {
     public:
-        std::string port_name = "/dev/ttyUSB2";
+        std::string port_name = "/dev/ttyUSB0";
         std::string baudrate = "19200";
 };
 
@@ -37,7 +38,8 @@ class CONNECTION
         std::chrono::system_clock::time_point prev_read_time;
         int val = 0;
         // int t_rpm = 100;
-        int r_rpm = 20;
+
+        odometry ODOM;
 
     bool CONNECT()
     {
@@ -188,13 +190,13 @@ class CONNECTION
         return check_write;
     }
 
-    void receive_task()
+    void receive_task(double wheel_dist)
     {
         // ROS_INFO("receive task");
-            read_motor_state();
+            read_motor_state(wheel_dist);
     }
 
-    short read_motor_state(void)
+    short read_motor_state(double wheel_dist)
     {
 
         // ROS_INFO("read motor speed");
@@ -209,7 +211,7 @@ class CONNECTION
 
         std::chrono::system_clock::time_point read_time = std::chrono::system_clock::now();
         std::chrono::duration<double> dt_duration = read_time - prev_read_time;
-
+        
         prev_read_time = read_time;
 
         double dt = dt_duration.count();
@@ -257,6 +259,7 @@ class CONNECTION
                 else
                 {
                     ROS_INFO("R_rpm = %d, L_rpm = %d", motor_info.R_rpm, motor_info.L_rpm);
+                    ODOM.OD(motor_info.R_rpm, motor_info.L_rpm, wheel_dist, dt);
                     // ROS_INFO("L_rpm = %d", motor_info.L_rpm);
                 }
             } 
