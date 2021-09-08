@@ -3,17 +3,18 @@ project(point_track)
 add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
-  cv_bridge
   rosconsole
   roscpp
   sensor_msgs
+  cv_bridge
+  tf
 )
 
 find_package(OpenCV REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS include
-  #  LIBRARIES point_track
+#  LIBRARIES point_track
   CATKIN_DEPENDS cv_bridge rosconsole roscpp sensor_msgs
   DEPENDS system_lib
 )

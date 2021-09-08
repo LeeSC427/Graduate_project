@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(lidar_pointcloud)
 add_compile_options(-std=c++11)
+
 find_package(catkin REQUIRED COMPONENTS
   rosconsole
   roscpp
   sensor_msgs
   cv_bridge
+  tf
 )
 
 find_package(OpenCV REQUIRED)

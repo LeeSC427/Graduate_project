@@ -6,28 +6,62 @@
 #include "ros/ros.h"
 #include "geometry_msgs/Twist.h"
 #include <cmath>
-#include "connection/odom.h"
+#include "sensor_msgs/Joy.h"
+#include <iostream>
+#include "std_msgs/String.h"
+#include "nav_msgs/Odometry.h"
+#include "tf/transform_broadcaster.h"
+
+// #include "connection/odom.h"
 // #include "connection/joy.h"
+#define T_RPM 146
+
+class Location
+{
+    public:
+        double x;
+        double y;
+        double th;
+        double x_prev;
+        double y_prev;
+        double th_prev;
+    Location(): x(0.0), y(0.0), th(0.0), x_prev(0.0), y_prev(0.0), th_prev(0.0)
+    {
+
+    };
+    ~Location()
+    {
+    }
+};
 
 class PORT
 {
     public:
-        std::string port_name = "/dev/ttyUSB0";
+        // std::string port_name = "/dev/ttyUSB0";
         std::string baudrate = "19200";
-};
-
-class MOTOR_INFO
-{
-    public:
-        short L_rpm = 0;
-        short R_rpm = 0;
 };
 
 class CONNECTION
 {
+    private:
+        struct MOTOR_INFO
+        {
+            short L_rpm;
+            short L_current;
+            char L_state;
+            int L_pose;
+
+            short R_rpm;
+            short R_current;
+            char R_state;
+            int R_pose;
+        };
+
+        MOTOR_INFO prev_mi;
+        Location loc;
+        // void pub_odom(Location location);
     public:
         PORT port;
-        MOTOR_INFO motor_info;
         int fd;
         bool tqoff;
         int read_buf_pos = 0;
@@ -35,20 +69,22 @@ class CONNECTION
         unsigned char read_buf[256];
         unsigned char write_buf[256];
         std::mutex fd_mtx;
-        std::chrono::system_clock::time_point prev_read_time;
+        double prev_read_time;
+        // ros::Publisher pub_odom;
+        // std::chrono::system_clock::time_point prev_read_time;
         int val = 0;
         // int t_rpm = 100;
 
-        odometry ODOM;
+        // Odom odom;
 
-    bool CONNECT()
+    bool CONNECT(std::string port_name)
     {
         fd = 0;
         struct termios newtio;
 
         while(ros::ok())
         {
-            fd = open(port.port_name.c_str(), O_RDWR | O_NOCTTY);
+            fd = open(port_name.c_str(), O_RDWR | O_NOCTTY);
 
             if(fd < 0)
             {
@@ -58,7 +94,7 @@ class CONNECTION
                 break;
         }
 
-        ROS_INFO("RObot connected!", port.port_name.c_str());
+        ROS_INFO("RObot connected!", port_name.c_str());
 
         memset(&newtio, 0, sizeof(newtio));
 
@@ -134,7 +170,7 @@ class CONNECTION
             
             
 
-        ROS_INFO("cmd= rpm_1: %d, rpm_2: %d",rpm_1, rpm_2);
+        ROS_INFO("cmd= rpm_1: %d, rpm_2: %d", -rpm_1, rpm_2);
             
             if(rpm_1 > 0)
             {
@@ -198,6 +234,7 @@ class CONNECTION
 
     short read_motor_state(double wheel_dist)
     {
+        double dist_per_pulse = 0.130 * (double) M_PI / 60.0;  // dist_mm / pulse
 
         // ROS_INFO("read motor speed");
         if(fd <= 0)
@@ -209,12 +246,16 @@ class CONNECTION
         
         request_motor_state();
 
-        std::chrono::system_clock::time_point read_time = std::chrono::system_clock::now();
-        std::chrono::duration<double> dt_duration = read_time - prev_read_time;
+        double read_time = ros::Time::now().toSec();
+        double dt_duration = read_time - prev_read_time;
+        // std::chrono::system_clock::time_point read_time = std::chrono::system_clock::now();
+        // std::chrono::duration<double> dt_duration = read_time - prev_read_time;
         
         prev_read_time = read_time;
 
-        double dt = dt_duration.count();
+        // double dt = dt_duration.count();
+
+        double dt = dt_duration;
 
         int read_size = read(fd, &read_buf[read_buf_pos], 128);
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
@@ -240,35 +281,105 @@ class CONNECTION
             if(read_buf[i+3] == read_id[3])
             if(read_buf[i+4] == read_id[4])
             {
+                MOTOR_INFO mi;
+
                 int R_sign = -1, L_sign = -1;
 
-                motor_info.R_rpm = (short)R_sign * Byte2Short(read_buf[i+5], read_buf[i+6]);
-                motor_info.L_rpm = (short)L_sign * Byte2Short(read_buf[i+14], read_buf[i+15]);
+                mi.R_rpm = (short)R_sign * Byte2Short(read_buf[i+5], read_buf[i+6]);
+                mi.L_rpm = (short)L_sign * Byte2Short(read_buf[i+14], read_buf[i+15]);
+
+                mi.L_current = Byte2Short(read_buf[i+7], read_buf[i+8]);
+                mi.R_current = Byte2Short(read_buf[i+16], read_buf[i+17]);
+
+                mi.L_state = read_buf[i+9];
+                mi.R_state = read_buf[i+18];
+
+                mi.R_pose = -Byte2int(read_buf[i+10], read_buf[i+11], read_buf[i+12], read_buf[i+13]);
+                mi.L_pose = Byte2int(read_buf[i+19], read_buf[i+20], read_buf[i+21], read_buf[i+22]);
 
                 unsigned char chk = check_sum_send(&read_buf[i], 23);
+                
+                if(read_buf[i+23] != chk)
+                {
+                    ROS_WARN("checksum error");
+                    // motor_odom.R_pose = 0;
+                    // motor_odom.L_pose = 0;
+                    continue;
+                }
+                int remain_size = read_buf_pos - i - 24;
+                unsigned char temp[256] = {};
+                memcpy(temp, &read_buf[i+24],remain_size);
+                memcpy(read_buf, temp, remain_size);
+
+                i = -1;
+                read_buf_pos = remain_size;
+
+                int L_d_pose = mi.L_pose - prev_mi.L_pose;
+                int R_d_pose = mi.R_pose - prev_mi.R_pose;
+
+                memcpy(&prev_mi, &mi, sizeof(MOTOR_INFO));
+
+                if(abs(L_d_pose) > 100 || abs(R_d_pose) > 100)
+                {
+                    ROS_WARN("counter error R: %d, L: %d", R_d_pose, L_d_pose);
+                    continue;
+                }        
+                
+                double L_d_distance = (double)L_d_pose * dist_per_pulse;
+                double R_d_distance = (double)R_d_pose * dist_per_pulse;
+
+                double distance = (L_d_distance + R_d_distance) / 2.0;
+                double radian = -(R_d_distance - L_d_distance) / wheel_dist;
+                double angle = radian/(double)M_PI*180.0;
+
+                std::cout << distance << " " << radian << " " << angle << std::endl;
+                // ROS_INFO("R_rpm = %d, L_rpm = %d", motor_odom.R_rpm, motor_odom.L_rpm);
                 
                 // ROS_INFO("chk = %d", chk);
                 // ROS_INFO("r_buf = %d", read_buf[i+23]);
 
-                if(read_buf[i+23] != chk)
-                {
-                    ROS_WARN("checksum error");
+                loc.x = loc.x_prev + distance * cos(loc.th);
+                loc.y = loc.y_prev + distance * sin(loc.th);
+                loc.th = loc.th_prev + radian;
 
-                    continue;
-                }
-                else
-                {
-                    ROS_INFO("R_rpm = %d, L_rpm = %d", motor_info.R_rpm, motor_info.L_rpm);
-                    ODOM.OD(motor_info.R_rpm, motor_info.L_rpm, wheel_dist, dt);
-                    // ROS_INFO("L_rpm = %d", motor_info.L_rpm);
-                }
-            } 
+                loc.x_prev = loc.x;
+                loc.y_prev = loc.y;
+                loc.th_prev = loc.th;
+        
+                std::cout << "x: " << loc.x << "y: " << loc.y << "th: " << loc.th << std::endl;
+                // ROS_INFO("R_rpm = %d, L_rpm = %d", motor_odom.R_pose, motor_odom.L_pose);
+                // odom.getodom(motor_odom.R_pose, motor_odom.L_pose, wheel_dist, dt);
+               // ROS_INFO("L_rpm = %d", motor_info.L_rpm);
+                
+            }   
         }
     }
+
+    // void CONNECTION::Pub_odom(Location loc)
+    // {
+    //     nav_msgs::Odometry odom;
+        
+    //     odom.header.stamp = ros::Time::now();
+    //     odom.header.frame_id = "odom";
+    //     odom.child_frame_id = "base_link";
+
+    //     odom.pose.pose.position.x = loc.x;
+    //     odom.pose.pose.position.y = loc.y;
+    //     odom.pose.pose.position.z = 0.0;
+
+    //     odom.pose.pose.orientation = tf::createQuarternionMsgFromYaw(loc.th);
+
+    //     pub_odom
+    // }
 
     short Byte2Short(unsigned char low, unsigned char high)
     {
         return ((short) low | (short) high << 8);
+    }
+
+    int Byte2int(unsigned char d1, unsigned char d2, unsigned char d3, unsigned char d4)
+    {
+        return ((int) d1 | (int) d2 << 8 | (int) d3 << 16 | (int) d4 << 24);
     }
 
     void request_motor_state()
@@ -310,3 +421,42 @@ class CONNECTION
             return 0;
     }
 };
+
+class CMD_vel
+{
+    public:
+        
+        int run_time = 0;
+        float T_vel = 0.0f;
+        float R_vel = 0.0f;
+        int joy_ACT = 0;
+        int rpm_1 = 0;
+        int rpm_2 = 0;
+        CONNECTION con;
+
+        void CMD_VEL(const geometry_msgs::Twist::ConstPtr& msg)
+        {
+            T_vel = msg->linear.x;
+            R_vel = msg->angular.z;
+            joy_ACT = msg->linear.z;
+        }
+
+        
+        void MOV(double speed, double R_SPEED, double wheel_dist, std::string port_name)
+        {
+            
+            rpm_1 = speed * T_RPM * (T_vel + R_vel*1.72*R_SPEED);
+            rpm_2 = speed * T_RPM * (T_vel - R_vel*1.72*R_SPEED);
+            // rpm_1 = T_RPM;
+            // rpm_2 = T_RPM;
+
+            con.receive_task(wheel_dist);
+            con.send_task(rpm_1, rpm_2, joy_ACT);
+            
+            if(run_time == 0)
+            {
+                run_time = con.CONNECT(port_name);
+            }
+        }
+};
+

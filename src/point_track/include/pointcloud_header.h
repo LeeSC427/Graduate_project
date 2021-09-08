@@ -7,6 +7,20 @@
 #include <string>
 #include <signal.h>
 #include <vector>
+#include "tf/transform_listener.h"
+#include "tf/tf.h"
+
+class Tf_val
+{
+    public:
+        tf::Matrix3x3 R = tf::Matrix3x3(transform.getRotation());
+        tf::Vector3 T = tf::Vector3(240, 320, 0);
+        tf::StampedTransform transform;
+        // void get_tf(tf::StampedTransform transform)
+        // {
+        //     R = tf::Matrix3x3(transform.getRotation());
+        // }
+};
 
 class Points
 {
@@ -53,6 +67,8 @@ class Mean
 class Point_cloud
 {
     public:
+            int point_x = 0;
+            int point_y = 0;
             int center_x = 240;
             int center_y = 320;
             int box_dist = 20;
@@ -64,6 +80,14 @@ class Point_cloud
             int& ref_run = runtime;
             Mean mean;
             vector<Targets> TARGET1;
+            std::string win_name;
+            int mm_to_pixel = 50;
+            Tf_val tf_val;
+
+        void get_name(std::string name)
+        {
+            win_name = name;
+        }
 
         void Tracking(const sensor_msgs::LaserScan::ConstPtr &scan_msg)
         {
@@ -117,7 +141,7 @@ class Point_cloud
                 mean = MEAN(mat, TARGET1, mean, tar_size);
             }
 
-            Show(mat);
+            Show(mat, win_name);
         }
 
         std::vector<Points> point_cloud(vector<Points> POINTS, cv::Point center, cv::Mat matrix, std::vector<float> scan_range, double scan_angle, int size)
@@ -125,10 +149,26 @@ class Point_cloud
             Points po;
             for(int i = 0; i < size; i++)
             {
-                ang = scan_angle * i;
-                po.points(240 + std::round(sin(ang)*scan_range[i] * 50), 320 + std::round(cos(ang)*scan_range[i] * 50));
-                POINTS.push_back(po);
+                if(scan_range[i] <= 50.0)
+                {
+                    ang = scan_angle * i;
+                    
+                    point_x = std::round(sin(ang)*scan_range[i] * mm_to_pixel);
+                    point_y = std::round(cos(ang)*scan_range[i] * mm_to_pixel);
 
+                    
+                }
+                else
+                {
+                    point_x = 0;
+                    point_y = 0;
+                }
+                
+                tf::Vector3 Original_point = tf::Vector3(point_x, point_y, 0);
+                tf::Vector3 transform_point = Original_point * tf_val.R + tf_val.T;
+                
+                po.points(transform_point[0], transform_point[1]);
+                POINTS.push_back(po);
                 cv::line(matrix, center, POINTS[i].poi, cv::Scalar(255,255,255),3);
                 cv::circle(matrix, POINTS[i].poi, 2, cv::Scalar(0,0,0), -1);
             }
@@ -252,10 +292,10 @@ class Point_cloud
             return TARGETa;
         }
         
-        void Show(cv::Mat matrix)
+        void Show(cv::Mat matrix, std::string name_win)
         {
-            cv::namedWindow("Point Cloud");
-            cv::imshow("Point Cloud", matrix);
+            cv::namedWindow(name_win);
+            cv::imshow(name_win, matrix);
             cv::waitKey(1);
         }
 

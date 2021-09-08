@@ -1,124 +1,81 @@
 #include <iostream>
 #include "ros/ros.h"
 #include <cmath>
-
+#include <typeinfo>
 #define _USE_MATH_DEFINES
 
-class Values
+class Location
 {
     public:
-        int r_rpm;
-        int l_rpm;
-        double wheel_dist;
-        double dt;
-    
-    Values()
+        double x;
+        double y;
+        double th;
+        double x_prev;
+        double y_prev;
+        double th_prev;
+    Location(): x(0.0), y(0.0), th(0.0), x_prev(0.0), y_prev(0.0), th_prev(0.0)
     {
-                r_rpm = 0;
-                l_rpm = 0;
-                dt = 0.0;
-                wheel_dist = 0.0;
 
-    }
-
-    ~Values()
+    };
+    ~Location()
     {
     }
 };
 
-// class Odom
-// {   
-//     public:
-//         double x_prev;
-//         double y_prev;
-//         double x_location;
-//         double y_location;
-//         double angle_prev;
-//         double angle;
-
-//     Odom()
-//     {
-//                 x_prev = 0.0;
-//                 y_prev = 0.0;
-//                 x_location = 0.0;
-//                 y_location = 0.0;
-//                 angle_prev = 0.0;
-//                 angle = 0.0;
-
-//     }
-
-//     ~Odom()
-//     {
-//     }
-// };
-
-class odometry
+class Odom
 {
     public:
-        // Odom odom;
-        Values val;
+        Location loc;
+        int prev_R_pose;
+        int prev_L_pose;
+        double dist;
+        double angle;
 
-        double x_prev = 0.0;
-        double y_prev = 0.0;
-        double x_location = 0.0;
-        double y_location = 0.0;
-        double angle_prev = 0.0;
-        double angle = 0.0;
-
-        void get_val(short R_rpm, short L_rpm, double Wheel_dist, double Dt)
+        void getodom(int R_pose, int L_pose, double wheel_dist, double dt)
         {
-            // val.r_rpm = r_rpm;
-            // val.l_rpm = l_rpm;
-            // val.wheel_dist = wheel_dist;
-            // val.dt = dt;
-            val.r_rpm = (int) R_rpm;
-            val.l_rpm = (int) L_rpm;
-            val.wheel_dist = Wheel_dist;
-            val.dt = Dt;
-        }
-        void get_odom()
-        {
-            if(val.dt > 0.001){
-                double vr = ((double)val.r_rpm / 60.0) * 0.13 * M_PI; // m/sec
-                double vl = ((double)val.l_rpm / 60.0) * 0.13 * M_PI; // m/sec
-                double V = (vr + vl) / 2.0;
-                double w = (vr - vl) / val.wheel_dist;
-                std::cout << val.dt << std::endl;
-                std::cout << vr << " " << vl << " " << V << " " << w << " " << std::endl;
-                std::cout << angle_prev << " " << x_prev << " " << y_prev << std::endl;
+            double dist_per_pulse = 130 * (double) M_PI / 4096.0;  // dist_mm / pulse
+            double x_dist, y_dist;
+            double x_temp, y_temp, ang_temp;
 
-                angle = angle_prev + w * val.dt;
-                x_location = x_prev + V * cos(angle_prev) * val.dt;
-                y_location = y_prev + V * sin(angle_prev) * val.dt;
-                
-                
-                if(angle > 2.0 * 3.14)
-                {
-                    angle_prev = angle - 2.0 * 3.14;
-                }
-                else if(angle < 0.0)
-                {
-                    angle_prev = angle + 2.0 * 3.14;
-                }
-                std::cout << angle_prev << std::endl;
+            x_dist = ((double)R_pose - (double)prev_R_pose) * dist_per_pulse;
+            y_dist = ((double)L_pose - (double)prev_L_pose) * dist_per_pulse;
+            dist = (x_dist + y_dist) / 2.0;
+            angle = (x_dist - y_dist) / wheel_dist;
+            
+            prev_R_pose = R_pose;
+            prev_L_pose = L_pose;
+            
+            std::cout << R_pose << " " << L_pose << " " << std::endl;
+            std::cout << x_dist << " " << y_dist << " " << angle << std::endl;
+            std::cout << cos(angle) << std::endl;
 
-                x_prev = x_location;
-                y_prev = y_location;
-            }
+            std::cout << "loc_prev " <<loc.x_prev << " " << loc.y_prev << " dist =" << dist << std::endl;
+            
+            x_temp = loc.x;
+            loc.x_prev = x_temp;
+            
+            y_temp = loc.y;
+            loc.y_prev = y_temp;
+
+            ang_temp = loc.th;
+            loc.th_prev = ang_temp;
+
+            loc.x = x_temp + dist * cos(angle);
+            loc.y = y_temp + dist * sin(angle);
+            loc.th = ang_temp + angle;
+
+            std::cout << "loc_e " <<loc.x << " " << loc.y << " " << loc.th << std::endl;
+
+            loc.x_prev = loc.x;
+            loc.y_prev = loc.y;
+            loc.th_prev = loc.th;
         }
 
-        void OD(short r_rpm, short l_rpm, double wheel_dist, double dt)
-        {
-            get_val(r_rpm, l_rpm, wheel_dist, dt);
-            get_odom();
-        }
+    Odom(): prev_R_pose(0), prev_L_pose(0), dist(0.0), angle(0.0)
+    {
+    }
 
-        odometry()
-        {
-        }
-
-        ~odometry()
-        {
-        }
-
+    ~Odom()
+    {
+    }
 };

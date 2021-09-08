@@ -4,17 +4,17 @@
 	<node name="cmd_vel" pkg="cmd_vel" type="cmd_vel_node" />
 	
 	<node name="connection" pkg="connection" type="connection_node" output="screen">
-			<param name="speed"		type="double" value="0.1" />
-			<param name="R_SPEED"		type="double" value="0.523" />
-			<param name="wheel_dist"		type="double" value="0.4" />
-
+			<param name="speed"		type="double" value="0.3" />
+			<param name="R_SPEED"		type="double" value="0.2615" />
+			<param name="wheel_dist"		type="double" value="0.33" />
+			<param name="port_name"			type="string" value="/dev/ttyUSB2" />
 		</node>
 	
-	<group ns = "lidar1">
+	<!-- <group ns = "lidar"> -->
    	 <node name="ydlidar_node_1"  pkg="ydlidar_ros"  type="ydlidar_node" output="screen" respawn="false" >
-    		<param name="port"         type="string" value="/dev/ttyUSB1"/>
+    		<param name="port"         type="string" value="/dev/ttyUSB0"/>
     		<param name="baudrate"         type="int" value="512000"/>
-    		<param name="frame_id"     type="string" value="laser_frame1"/>
+    		<param name="frame_id"     type="string" value="laser1"/>
 			<param name="resolution_fixed"    type="bool"   value="true"/>
    			<param name="auto_reconnect"    type="bool"   value="true"/>
     		<param name="reversion"    type="bool"   value="true"/>
@@ -23,28 +23,65 @@
     		<param name="range_min"    type="double" value="0.1" />
     		<param name="range_max"    type="double" value="32.0" />
     		<param name="ignore_array" type="string" value="" />
+			<param name="topic_name"         type="string" value="scan1"/>
     	 </node>
 
-  	 <node pkg="tf" type="static_transform_publisher" name="base_link_to_laser1"
-    		args="0.2245 0.0 0.2 0.0 0.0  0.0 /base_footprint /laser_frame 40" />
+		<node pkg="tf" type="static_transform_publisher" name="base_link_to_laser1"
+    		args="0.17328 0.16319 0.0 0.0 0.0 3.141592 /base_link /laser1 100" />
 
 	 <node name="ydlidar_node_2" pkg="ydlidar_ros"  type="ydlidar_node" output="screen" respawn="false" >
-    		<param name="port"         type="string" value="/dev/ttyUSB2"/>
+    		<param name="port"         type="string" value="/dev/ttyUSB1"/>
     		<param name="baudrate"         type="int" value="512000"/>
-    		<param name="frame_id"     type="string" value="laser_frame1"/>
-		<param name="resolution_fixed"    type="bool"   value="true"/>
-   		<param name="auto_reconnect"    type="bool"   value="true"/>
+    		<param name="frame_id"     type="string" value="laser2"/>
+			<param name="resolution_fixed"    type="bool"   value="true"/>
+   			<param name="auto_reconnect"    type="bool"   value="true"/>
     		<param name="reversion"    type="bool"   value="true"/>
     		<param name="angle_min"    type="double" value="-180" />
     		<param name="angle_max"    type="double" value="180" />
     		<param name="range_min"    type="double" value="0.1" />
     		<param name="range_max"    type="double" value="32.0" />
     		<param name="ignore_array" type="string" value="" />
+			<param name="topic_name"         type="string" value="scan2"/>
     	 </node>
-  	 <node pkg="tf" type="static_transform_publisher" name="base_link_to_laser2"
-    		args="0.2245 0.0 0.2 0.0 0.0  0.0 /base_footprint /laser_frame 40" />
-	</group>
+		 
+		<node pkg="tf" type="static_transform_publisher" name="base_link_to_laser2"
+    		args="-0.17328 -0.16319 0.0 3.141592 0.0 3.141592 /base_link /laser2 100" />
 
+        <node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
+            <param name="destination_frame" value="laser_multi"/>
+        <param name="cloud_destination_topic" value="/merged_cloud"/>
+        <param name="scan_destination_topic" value="/scan_multi"/>
+                <param name="laserscan_topics" value ="/scan1 /scan2" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+
+                <param name="angle_min" value="-3.141592"/>
+                <param name="angle_max" value="3.141592"/>
+                <param name="angle_increment" value="0.0058"/>
+                <param name="scan_time" value="0.0333333"/>
+                <param name="range_min" value="0.30"/>
+                <param name="range_max" value="50.0"/>
+
+    </node>
+
+			<node pkg="tf" type="static_transform_publisher" name="base_link_to_laser_multi" 
+			args="0 0 0 -0.1 0 0 base_link laser_multi 100"/>
+
+	 <!-- <node name = "point_cloud1" pkg = "lidar_pointcloud" type = "lidar_pointcloud_node" output = "screen">
+	 		<param name="topic_name"         type="string" value="/scan1"/>
+			<param name="name_win"         type="string" value="lidar1"/>
+	 </node>
+
+	 <node name = "point_cloud2" pkg = "lidar_pointcloud" type = "lidar_pointcloud_node" output = "screen">
+	 		<param name="topic_name"         type="string" value="/scan2"/>
+			<param name="name_win"         type="string" value="lidar2"/>
+	 </node> -->
+
+	 <node name = "point_track" pkg = "point_track" type = "point_track_node" output = "screen">
+	 		<param name="topic_name"         type="string" value="/scan_multi"/>
+			<param name="name_win"         type="string" value="lidar_merge"/>
+	 </node>
+
+
+	<!-- </group> -->
 
 
 </launch>

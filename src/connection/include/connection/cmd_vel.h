@@ -32,7 +32,7 @@ class CMD_vel
         }
 
         
-        void MOV(double speed, double R_SPEED, double wheel_dist)
+        void MOV(double speed, double R_SPEED, double wheel_dist, std::string port_name)
         {
             rpm_1 = speed * T_RPM * (T_vel + R_vel*1.72*R_SPEED);
             rpm_2 = speed * T_RPM * (T_vel - R_vel*1.72*R_SPEED);
@@ -44,7 +44,7 @@ class CMD_vel
             
             if(run_time == 0)
             {
-                run_time = con.CONNECT();
+                run_time = con.CONNECT(port_name);
             }
         }
 };
