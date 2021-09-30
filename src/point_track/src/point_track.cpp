@@ -11,13 +11,14 @@ int main(int argc, char **argv)
 
     ros::init(argc, argv, "point_track");
     ros::NodeHandle nh;
+    ros::NodeHandle n;
     ros::NodeHandle nh_private("~");
 
     nh_private.param<std::string>("topic_name", topic_name, "scan1"); 
     nh_private.param<std::string>("name_win", name_win, "Pointcloud1");
 
     ros::Subscriber node = nh.subscribe(topic_name,1000,&Point_cloud::Tracking, &pnt);
-
+    
     tf::TransformListener tf_ira;
 
     ros::Rate rate(10.0);
@@ -25,10 +26,10 @@ int main(int argc, char **argv)
     while(ros::ok())
     {
         tf::StampedTransform transform;
-
+        pnt.publish(n);
         try
         {
-            tf_ira.lookupTransform("/base_link", "laser_multi",
+            tf_ira.lookupTransform("/base_link", "/laser_multi",
                                         ros::Time(0), pnt.tf_val.transform);
         }
         catch(tf::TransformException &ex)

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "connection/connection.h"
+#include "connection/cmd_vel.h"
 
 
 int main(int argc, char** argv)
@@ -14,6 +14,7 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "connection");        // specify the name of node
 
 	ros::NodeHandle n;
+    ros::NodeHandle nh;
     ros::NodeHandle n_private("~");
     
     n_private.param<double>("speed", speed, 4.0);
@@ -23,12 +24,13 @@ int main(int argc, char** argv)
 
 
     ros::Subscriber sub = n.subscribe("/cmd_vel/cmd_vel", 10, &CMD_vel::CMD_VEL, &cmd);
-    
+    ros::Subscriber subs = nh.subscribe("/track_cmd", 10, &CMD_vel::TRACK_CMD, &cmd);
+
     ros::Rate loop_rate(15);  
 
     while(ros::ok())
     {
-        cmd.MOV(speed, R_SPEED, wheel_dist, port_name);
+        cmd.MOV(speed, R_SPEED, wheel_dist, port_name, nh);
 
         loop_rate.sleep();
         ros::spinOnce();  

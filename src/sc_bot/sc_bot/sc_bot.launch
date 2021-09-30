@@ -48,7 +48,7 @@
     		args="-0.17328 -0.16319 0.0 3.141592 0.0 3.141592 /base_link /laser2 100" />
 
         <node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
-            <param name="destination_frame" value="laser_multi"/>
+            <param name="destination_frame" value="/laser_multi"/>
         <param name="cloud_destination_topic" value="/merged_cloud"/>
         <param name="scan_destination_topic" value="/scan_multi"/>
                 <param name="laserscan_topics" value ="/scan1 /scan2" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
@@ -63,7 +63,7 @@
     </node>
 
 			<node pkg="tf" type="static_transform_publisher" name="base_link_to_laser_multi" 
-			args="0 0 0 -0.1 0 0 base_link laser_multi 100"/>
+			args="0 0 0 -0.1 0 0 /base_link /laser_multi 100"/>
 
 	 <!-- <node name = "point_cloud1" pkg = "lidar_pointcloud" type = "lidar_pointcloud_node" output = "screen">
 	 		<param name="topic_name"         type="string" value="/scan1"/>
@@ -80,6 +80,11 @@
 			<param name="name_win"         type="string" value="lidar_merge"/>
 	 </node>
 
+	 <node name = "tracking_cmd_vel" pkg = "tracking_cmd_vel" type = "tracking_cmd_vel_node" output = "screen">
+	 		<param name="t_vel"		type="double"	value="0.2"/>
+			<param name="r_vel"		type="double"	value="5.0"/>
+	 </node>
+ 
 
 	<!-- </group> -->
 

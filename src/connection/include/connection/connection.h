@@ -9,8 +9,8 @@
 #include "sensor_msgs/Joy.h"
 #include <iostream>
 #include "std_msgs/String.h"
-#include "nav_msgs/Odometry.h"
-#include "tf/transform_broadcaster.h"
+#include <nav_msgs/Odometry.h>
+#include <tf/transform_broadcaster.h>
 
 // #include "connection/odom.h"
 // #include "connection/joy.h"
@@ -76,6 +76,13 @@ class CONNECTION
         // int t_rpm = 100;
 
         // Odom odom;
+
+        ros::Publisher pub_odom;
+
+    void publish(ros::NodeHandle nh)
+    {
+        pub_odom = nh.advertise<nav_msgs::Odometry>("odom", 100);
+    }
 
     bool CONNECT(std::string port_name)
     {
@@ -143,13 +150,13 @@ class CONNECTION
         return check_write;
     }
 
-    void send_task(float T_vel, float R_vel, int joy_ACT)
+    void send_task(float T_vel, float R_vel)
     {
         // ROS_INFO("send_task");
-        run_motor(T_vel, R_vel, joy_ACT);
+        run_motor(T_vel, R_vel);
     }
 
-    short run_motor(int rpm_1, int rpm_2, int joy_ACT)
+    short run_motor(int rpm_1, int rpm_2)
     {
         unsigned char l_rpm = 0;
         unsigned char r_rpm = 0;
@@ -163,40 +170,33 @@ class CONNECTION
 
         unsigned char write_motor_cmd[13] = {183, 184, 1, 207, 7, 1, 0, 0, 1, 0, 0, 0, 184};
 
-        // ROS_INFO("joy_FB: %lf", joy_ACT);
-
-        if(joy_ACT != 0)
-        {            
-            
-            
+        // ROS_INFO("joy_FB: %lf", joy_ACT); 
 
         ROS_INFO("cmd= rpm_1: %d, rpm_2: %d", -rpm_1, rpm_2);
             
-            if(rpm_1 > 0)
+        if(rpm_1 > 0)
+        {
+            r_rpm = rpm_1;
+            write_motor_cmd[9] = r_rpm;
+            write_motor_cmd[10] = 0;
+        }
+        else if(rpm_1 < 0)
             {
-                r_rpm = rpm_1;
-                write_motor_cmd[9] = r_rpm;
-                write_motor_cmd[10] = 0;
-            }
-            else if(rpm_1 < 0)
-            {
-                r_rpm = 256 - abs(rpm_1);
-                write_motor_cmd[9] = r_rpm;
-                write_motor_cmd[10] = 255;
-            }
-            if(rpm_2 > 0)
-            {
-                l_rpm = 256 - rpm_2;
-                write_motor_cmd[6] = l_rpm;
-                write_motor_cmd[7] = 255;
-
-            }
-            else if(rpm_2 < 0)
-            {
-                l_rpm = abs(rpm_2);
-                write_motor_cmd[6] = l_rpm;
-                write_motor_cmd[7] = 0;
-            }
+            r_rpm = 256 - abs(rpm_1);
+            write_motor_cmd[9] = r_rpm;
+            write_motor_cmd[10] = 255;
+        }
+        if(rpm_2 > 0)
+        {
+            l_rpm = 256 - rpm_2;
+            write_motor_cmd[6] = l_rpm;
+            write_motor_cmd[7] = 255;
+        }
+        else if(rpm_2 < 0)
+        {
+            l_rpm = abs(rpm_2);
+            write_motor_cmd[6] = l_rpm;
+            write_motor_cmd[7] = 0;
         }
 
 
@@ -234,6 +234,7 @@ class CONNECTION
 
     short read_motor_state(double wheel_dist)
     {
+
         double dist_per_pulse = 0.130 * (double) M_PI / 60.0;  // dist_mm / pulse
 
         // ROS_INFO("read motor speed");
@@ -332,7 +333,7 @@ class CONNECTION
                 double radian = -(R_d_distance - L_d_distance) / wheel_dist;
                 double angle = radian/(double)M_PI*180.0;
 
-                std::cout << distance << " " << radian << " " << angle << std::endl;
+                // std::cout << distance << " " << radian << " " << angle << std::endl;
                 // ROS_INFO("R_rpm = %d, L_rpm = %d", motor_odom.R_rpm, motor_odom.L_rpm);
                 
                 // ROS_INFO("chk = %d", chk);
@@ -345,8 +346,24 @@ class CONNECTION
                 loc.x_prev = loc.x;
                 loc.y_prev = loc.y;
                 loc.th_prev = loc.th;
-        
-                std::cout << "x: " << loc.x << "y: " << loc.y << "th: " << loc.th << std::endl;
+
+                geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(loc.th);
+
+                nav_msgs::Odometry odom;
+
+                odom.header.stamp = ros::Time::now();
+                odom.header.frame_id = "/odom";
+
+                odom.pose.pose.position.x = loc.x;
+                odom.pose.pose.position.y = loc.y;
+                odom.pose.pose.position.z = 0.0;
+                odom.pose.pose.orientation = odom_quat;
+
+                odom.child_frame_id = "/base_link";
+
+                pub_odom.publish(odom);
+
+                // std::cout << "x: " << loc.x << "y: " << loc.y << "th: " << loc.th << std::endl;
                 // ROS_INFO("R_rpm = %d, L_rpm = %d", motor_odom.R_pose, motor_odom.L_pose);
                 // odom.getodom(motor_odom.R_pose, motor_odom.L_pose, wheel_dist, dt);
                // ROS_INFO("L_rpm = %d", motor_info.L_rpm);
@@ -422,41 +439,41 @@ class CONNECTION
     }
 };
 
-class CMD_vel
-{
-    public:
+// class CMD_vel
+// {
+//     public:
         
-        int run_time = 0;
-        float T_vel = 0.0f;
-        float R_vel = 0.0f;
-        int joy_ACT = 0;
-        int rpm_1 = 0;
-        int rpm_2 = 0;
-        CONNECTION con;
+//         int run_time = 0;
+//         float T_vel = 0.0f;
+//         float R_vel = 0.0f;
+//         int joy_ACT = 0;
+//         int rpm_1 = 0;
+//         int rpm_2 = 0;
+//         CONNECTION con;
 
-        void CMD_VEL(const geometry_msgs::Twist::ConstPtr& msg)
-        {
-            T_vel = msg->linear.x;
-            R_vel = msg->angular.z;
-            joy_ACT = msg->linear.z;
-        }
+//         void CMD_VEL(const geometry_msgs::Twist::ConstPtr& msg)
+//         {
+//             T_vel = msg->linear.x;
+//             R_vel = msg->angular.z;
+//             joy_ACT = msg->linear.z;
+//         }
 
         
-        void MOV(double speed, double R_SPEED, double wheel_dist, std::string port_name)
-        {
+//         // void MOV(double speed, double R_SPEED, double wheel_dist, std::string port_name)
+//         // {
             
-            rpm_1 = speed * T_RPM * (T_vel + R_vel*1.72*R_SPEED);
-            rpm_2 = speed * T_RPM * (T_vel - R_vel*1.72*R_SPEED);
-            // rpm_1 = T_RPM;
-            // rpm_2 = T_RPM;
+//         //     rpm_1 = speed * T_RPM * (T_vel + R_vel*1.72*R_SPEED);
+//         //     rpm_2 = speed * T_RPM * (T_vel - R_vel*1.72*R_SPEED);
+//         //     // rpm_1 = T_RPM;
+//         //     // rpm_2 = T_RPM;
 
-            con.receive_task(wheel_dist);
-            con.send_task(rpm_1, rpm_2, joy_ACT);
+//         //     con.receive_task(wheel_dist);
+//         //     con.send_task(rpm_1, rpm_2, joy_ACT);
             
-            if(run_time == 0)
-            {
-                run_time = con.CONNECT(port_name);
-            }
-        }
-};
+//         //     if(run_time == 0)
+//         //     {
+//         //         run_time = con.CONNECT(port_name);
+//         //     }
+//         // }
+// };
 
